@@ -1,8 +1,13 @@
 import requests
 import json
 
-url = "http://127.0.0.1:5000/"
-data = {'input': 'Alice', 'receiver': 'Bob', 'message': 'We did it!'}
+url = 'http://192.168.0.103:80/'
+# payload = {"input": "doing something"}
+# # self.log(payload)
+# r=requests.post(url, data=payload)
+# print(r.text)
+# url = "http://127.0.0.1:5000/"
+data = {'input': 'Alice'}
 headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 r = requests.post(url, data=json.dumps(data), headers=headers)
 

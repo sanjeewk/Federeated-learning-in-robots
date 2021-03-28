@@ -27,9 +27,10 @@ def upload_input():
             flash('No selected input')
             return jsonify({ "Item": "why won't you say something"} )
         else:
+            # detect(input)
             print(input)
             response = "you did it"
-            return jsonify({ "Item": response} )
+            return jsonify({ "Item": input} )
     return '''
     <!doctype html>
     <title>API</title>
@@ -41,4 +42,4 @@ def upload_input():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run("0.0.0.0", port=80)

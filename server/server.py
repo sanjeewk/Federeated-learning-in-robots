@@ -1,14 +1,32 @@
 # server2.py
 import socket
-from threading import Thread
+from threading import Thread, Event
 import threading
 # from SocketServer import ThreadingMixIn // python2
 from socketserver import ThreadingMixIn
 import pickle
 import os
+import time
 TCP_IP = '0.0.0.0'
 TCP_PORT = 9001
 BUFFER_SIZE = 1024
+clientsent = 0
+evnt = Event()
+done = False
+
+def combine(modelA, modelB):
+    global clientsent
+    global done
+    if done==False:
+        while clientsent !=2:
+            print("in done loop ", clientsent)
+            continue
+        print("====================ayoooooo===============================")
+        for i in range (5):
+            print("u do be waiting")
+            time.sleep(1)
+        evnt.set()
+        done = True
 
 class ClientThread(Thread):
 
@@ -22,7 +40,7 @@ class ClientThread(Thread):
         print (" New thread started for "+ip+":"+str(port)+" " + str(n))
 
     def run(self):
-
+        global clientsent
         msg = self.sock.recv(BUFFER_SIZE)
         rsize = 0
         fsize =  int(msg.decode("ascii").strip())
@@ -36,7 +54,7 @@ class ClientThread(Thread):
                 b+=1
                 data = self.sock.recv(BUFFER_SIZE)
                 # print('data=%s', (data) )
-                print('rsize' + str(rsize))
+                # print('rsize' + str(rsize))
                 
                 if not data or data == 'END':
                     self.sock.close()
@@ -48,13 +66,17 @@ class ClientThread(Thread):
                     break                    
                 else:                    
                     f.write(data)
-                    print("writing " + str(b))
+                    # print("writing " + str(b))
                     rsize = rsize + len(data)
-                    print("------------")
+                    # print("------------")
         f.close()
         print('Successfully received file from client: ' + str(self.n))
+        threadLock.acquire()
+        clientsent += 1
+        threadLock.release()
 
-        # a = a+1
+        l = evnt.wait()
+
         filename='server_model.pt'
         f = open(filename,'rb')
         while True:
@@ -86,6 +108,8 @@ while True:
     newthread.start()
     threads.append(newthread)
     a=a+1
+    if a==2:
+        combine("a", "b")
 
 for t in threads:
     t.join()

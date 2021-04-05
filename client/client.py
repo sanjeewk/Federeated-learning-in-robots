@@ -4,34 +4,42 @@
 
 import socket
 import time 
-TCP_IP = 'localhost'
+import os
+import pickle 
+TCP_IP = '192.168.0.103'
 TCP_PORT = 9001
 BUFFER_SIZE = 1024
+
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((TCP_IP, TCP_PORT))
 
-filename='best.pt'
-f = open(filename,'rb')
-while True:   
-    l = f.read(BUFFER_SIZE)
-    while (l):
-        self.sock.send(l)
-        #print('Sent ',repr(l))
-        l = f.read(BUFFER_SIZE)
-    if not l:
-        f.close()
-        self.sock.close()
-        break
-print('Successfully sent the file to server')
+# filename='client_model.pt'
+filename = 'client_model.pt'
+fsize = str(os.path.getsize(filename))
+print("fsize: " + fsize)
 
-with open('best.pt', 'wb') as f:
+s.send(fsize.encode("ascii").strip())
+time.sleep(2)
+f = open(filename,'rb')
+l = f.read(BUFFER_SIZE)
+while (l):
+    s.send(l)
+    l = f.read(BUFFER_SIZE)
+f.close()
+time.sleep(1)
+# p = pickle.dumps('END')
+# s.send(p)
+
+print('Successfully sent the file to server')
+with open('received.pt', 'wb') as f:
     print ('file opened')
     while True:
         #print('receiving data...')
         data = s.recv(BUFFER_SIZE)
         # print('data=%s', (data))
         if not data:
+            print ('file close()')
             f.close()
             print ('file close()')
             break

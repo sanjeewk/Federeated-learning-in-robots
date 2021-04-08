@@ -1,5 +1,5 @@
 from cryptography.fernet import Fernet
-
+from os import path
 def write_key():
     """
     Generates a key and save it into a file
@@ -27,7 +27,9 @@ def encrypt(filename):
     # encrypt data
     encrypted_data = f.encrypt(file_data)
     # write the encrypted file
-    with open(filename, "wb") as file:
+    name , ext = path.splitext(f)
+    e_file = name + '_e'+ ext
+    with open(e_file, "wb") as file:
         file.write(encrypted_data)
 
 def decrypt(filename):

@@ -5,7 +5,7 @@ from tensorflow.keras.models import load_model
 
 def average_weights(modelA, modelB):
     
-    shutil.copy('modelA', 'model_3.h5')
+    copyfile('modelA', 'model_3.h5')
     model = load_model('modelA')
     model2 = load_model('modelB')
     model3 = load_model('model_3.h5')

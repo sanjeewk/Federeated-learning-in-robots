@@ -18,12 +18,13 @@ s.connect((TCP_IP, TCP_PORT))
 # filename='client_model.pt'
 filename = 'model.h5'
 encrypt.encrypt('model.h5')
-fsize = str(os.path.getsize(filename))
+encFilename = 'model_e.h5'
+fsize = str(os.path.getsize(encFilename))
 print("fsize: " + fsize)
 
 s.send(fsize.encode("ascii").strip())
 time.sleep(2)
-f = open(filename,'rb')
+f = open(e_filename,'rb')
 l = f.read(BUFFER_SIZE)
 while (l):
     s.send(l)

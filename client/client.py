@@ -24,7 +24,7 @@ print("fsize: " + fsize)
 
 s.send(fsize.encode("ascii").strip())
 time.sleep(2)
-f = open(e_filename,'rb')
+f = open(encFilename,'rb')
 l = f.read(BUFFER_SIZE)
 while (l):
     s.send(l)

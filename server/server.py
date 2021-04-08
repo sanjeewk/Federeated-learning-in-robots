@@ -5,7 +5,7 @@ from socketserver import ThreadingMixIn
 import pickle
 import os
 import time
-from encrypt import *
+import encrypt 
 from combine import average_weights
 
 TCP_IP = '0.0.0.0'
@@ -28,7 +28,7 @@ def combine(modelA, modelB):
             print("u do be waiting")
             time.sleep(1)
 
-        encrypt('modelf.h5')
+        encrypt.encrypt('modelf.h5')
         evnt.set()
         done = True
 
@@ -76,7 +76,7 @@ class ClientThread(Thread):
         f.close()
         print('Successfully received file from client: ' + str(self.n))
         threadLock.acquire()
-        decrypt(filen)
+        encrypt.decrypt(filen)
         clientsent += 1
         threadLock.release()
 

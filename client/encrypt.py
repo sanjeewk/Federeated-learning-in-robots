@@ -30,7 +30,7 @@ def encrypt(filename):
     with open(filename, "wb") as file:
         file.write(encrypted_data)
 
-def decrypt(filename, key):
+def decrypt(filename):
     """
     Given a filename (str) and key (bytes), it decrypts the file and write it
     """

@@ -1,7 +1,7 @@
 import numpy as np
 from shutil import copyfile
 from tensorflow.keras.models import load_model
-import S2S_Chatbot
+
 
 def average_weights(modelA, modelB):
     

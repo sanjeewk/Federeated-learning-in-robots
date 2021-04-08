@@ -9,13 +9,15 @@ import pickle
 TCP_IP = '192.168.0.103'
 TCP_PORT = 9001
 BUFFER_SIZE = 1024
+from encrypt import *
 
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((TCP_IP, TCP_PORT))
 
 # filename='client_model.pt'
-filename = 'client_model.pt'
+filename = 'model.h5'
+encrypt('model.h5')
 fsize = str(os.path.getsize(filename))
 print("fsize: " + fsize)
 
@@ -28,11 +30,10 @@ while (l):
     l = f.read(BUFFER_SIZE)
 f.close()
 time.sleep(1)
-# p = pickle.dumps('END')
-# s.send(p)
+
 
 print('Successfully sent the file to server')
-with open('received.pt', 'wb') as f:
+with open('received.h5', 'wb') as f:
     print ('file opened')
     while True:
         #print('receiving data...')
@@ -45,6 +46,7 @@ with open('received.pt', 'wb') as f:
             break
         # write data to a file
         f.write(data)
+decrypt('received.h5')
 
 print('Successfully recived the file from server')
 s.close()

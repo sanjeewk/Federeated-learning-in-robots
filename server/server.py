@@ -1,12 +1,13 @@
-# server2.py
 import socket
 from threading import Thread, Event
 import threading
-# from SocketServer import ThreadingMixIn // python2
 from socketserver import ThreadingMixIn
 import pickle
 import os
 import time
+from encrypt import *
+from combine import average_weights
+
 TCP_IP = '0.0.0.0'
 TCP_PORT = 9001
 BUFFER_SIZE = 1024
@@ -21,10 +22,13 @@ def combine(modelA, modelB):
         while clientsent !=2:
             print("in done loop ", clientsent)
             continue
-        print("====================ayoooooo===============================")
+        
+        average_weights(modelA, modelB)
         for i in range (5):
             print("u do be waiting")
             time.sleep(1)
+
+        encrypt('modelf.h5')
         evnt.set()
         done = True
 
@@ -47,7 +51,7 @@ class ClientThread(Thread):
         print("fsize: " + str(fsize))
 
         b=0
-        filen = 'receivedc_' + str(self.n)
+        filen = 'model_' + str(self.n) +'.h5'
         with open(filen, 'wb') as f:
             print ('file opened')
             while rsize < fsize:
@@ -72,12 +76,13 @@ class ClientThread(Thread):
         f.close()
         print('Successfully received file from client: ' + str(self.n))
         threadLock.acquire()
+        decrypt(filen)
         clientsent += 1
         threadLock.release()
 
         l = evnt.wait()
 
-        filename='server_model.pt'
+        filename='modelf.h5'
         f = open(filename,'rb')
         while True:
             print("sending")
@@ -109,7 +114,7 @@ while True:
     threads.append(newthread)
     a=a+1
     if a==2:
-        combine("a", "b")
+        combine('model_1.h5', 'model_2.h5')
 
 for t in threads:
     t.join()

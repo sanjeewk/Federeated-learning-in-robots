@@ -51,6 +51,7 @@ class ClientThread(Thread):
         print("fsize: " + str(fsize))
 
         b=0
+        threadLock.acquire()
         filen = 'model_' + str(self.n) +'.h5'
         with open(filen, 'wb') as f:
             print ('file opened')
@@ -75,14 +76,14 @@ class ClientThread(Thread):
                     # print("------------")
         f.close()
         print('Successfully received file from client: ' + str(self.n))
-        threadLock.acquire()
+
         encrypt.decrypt(filen)
         clientsent += 1
         threadLock.release()
 
         l = evnt.wait()
 
-        filename='modelf.h5'
+        filename='modelf_e.h5'
         f = open(filename,'rb')
         while True:
             print("sending")
@@ -114,7 +115,7 @@ while True:
     threads.append(newthread)
     a=a+1
     if a==2:
-        combine('model_1.h5', 'model_2.h5')
+        combine('model_0.h5', 'model_1.h5')
 
 for t in threads:
     t.join()

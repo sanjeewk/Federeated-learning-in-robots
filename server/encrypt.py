@@ -27,7 +27,7 @@ def encrypt(filename):
     # encrypt data
     encrypted_data = f.encrypt(file_data)
     # write the encrypted file
-    name , ext = path.splitext(filname)
+    name , ext = path.splitext(filename)
     e_file = name + '_e'+ ext
     with open(e_file, "wb") as file:
         file.write(encrypted_data)

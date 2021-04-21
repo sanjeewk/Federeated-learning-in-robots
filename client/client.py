@@ -43,7 +43,6 @@ with open('received.h5', 'wb') as f:
         if not data:
             print ('file close()')
             f.close()
-            print ('file close()')
             break
         # write data to a file
         f.write(data)
